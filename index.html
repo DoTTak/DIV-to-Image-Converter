@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog 이미지 제작용 HTML</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+
+    <script src="/lib/js/jquery_1.12.4_min.js"></script>
+
+    <script src="/lib/js/FileSaver.min.js"></script>
+    <script src="/lib/js/html2canvas.js"></script>
+</head>
+<body>
+    <h1 id="title">DIV(html) to Image(png) Converter</h1>
+
+    <div class="info_area">
+        <span class="select">현재 선택된 영역이 없습니다.</span>
+        <input type="button" value="저장하기" id="save">
+    </div>
+
+    <!-- 블로그 관련 -->
+    <div class="blog_area">
+        
+        <!-- 로고 -->
+        <div class="text_area logo">
+            <span class="text">DoTTak</span>
+        </div>
+
+        <!-- 배너 -->
+        <div class="text_area banner">
+            <span class="text">DoTTak Blog</span>
+        </div>
+
+    </div>
+
+    <script>
+        var info_select = $(".info_area .select")
+        var select = ""
+        var text = ""
+        // div 클릭 시
+        $(".text_area").on("click", function(){
+            select = $(this)
+            text = select.children(".text").text()
+            info_select.text(text + " 를 선택하셨습니다.")
+            info_select.addClass("active")
+
+            $(".text_area").removeClass("active")
+            select.addClass("active")
+        })
+
+
+        // 저장하기 버튼 클릭 시
+        $("#save").click(function() {
+            // border 숨기기 -> active 취소)
+            select.css('border', '0px')
+
+            // 선택된 아이디 구하기
+            html2canvas($(".text_area.active"), {
+                onrendered: function(canvas) {
+                    canvas.toBlob(function(blob) {
+                        saveAs(blob, text+'.png');
+                    });
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
